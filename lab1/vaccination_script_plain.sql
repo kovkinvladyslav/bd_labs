@@ -5,7 +5,7 @@
 -- Dumped from database version 16.4
 -- Dumped by pg_dump version 16.4
 
--- Started on 2024-10-10 12:40:35
+-- Started on 2024-10-16 23:12:51
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -87,7 +87,9 @@ CREATE TABLE public.vaccination (
     vaccination_id integer NOT NULL,
     citizen_id integer NOT NULL,
     doctor_id integer NOT NULL,
-    vaccine_id integer NOT NULL
+    vaccine_id integer NOT NULL,
+    clinic_id integer NOT NULL,
+    date date NOT NULL
 );
 
 
@@ -121,7 +123,7 @@ CREATE TABLE public.vaccine_clinic (
 ALTER TABLE public.vaccine_clinic OWNER TO postgres;
 
 --
--- TOC entry 4877 (class 0 OID 16399)
+-- TOC entry 4878 (class 0 OID 16399)
 -- Dependencies: 215
 -- Data for Name: citizen; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -132,7 +134,7 @@ COPY public.citizen (citizen_id, name, address, phone) FROM stdin;
 
 
 --
--- TOC entry 4880 (class 0 OID 16420)
+-- TOC entry 4881 (class 0 OID 16420)
 -- Dependencies: 218
 -- Data for Name: clinic; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -144,7 +146,7 @@ COPY public.clinic (clinic_id, address) FROM stdin;
 
 
 --
--- TOC entry 4879 (class 0 OID 16413)
+-- TOC entry 4880 (class 0 OID 16413)
 -- Dependencies: 217
 -- Data for Name: doctor; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -156,7 +158,7 @@ COPY public.doctor (doctor_id, name, phone) FROM stdin;
 
 
 --
--- TOC entry 4881 (class 0 OID 16427)
+-- TOC entry 4882 (class 0 OID 16427)
 -- Dependencies: 219
 -- Data for Name: doctor_clinic; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -169,19 +171,19 @@ COPY public.doctor_clinic (table_id, doctor_id, clinic_id) FROM stdin;
 
 
 --
--- TOC entry 4883 (class 0 OID 16460)
+-- TOC entry 4884 (class 0 OID 16460)
 -- Dependencies: 221
 -- Data for Name: vaccination; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.vaccination (vaccination_id, citizen_id, doctor_id, vaccine_id) FROM stdin;
-2	1	2	2
-1	1	1	1
+COPY public.vaccination (vaccination_id, citizen_id, doctor_id, vaccine_id, clinic_id, date) FROM stdin;
+1	1	1	1	1	2024-10-16
+2	1	2	2	2	2024-10-16
 \.
 
 
 --
--- TOC entry 4878 (class 0 OID 16408)
+-- TOC entry 4879 (class 0 OID 16408)
 -- Dependencies: 216
 -- Data for Name: vaccine; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -193,7 +195,7 @@ COPY public.vaccine (vaccine_id, dosage) FROM stdin;
 
 
 --
--- TOC entry 4882 (class 0 OID 16445)
+-- TOC entry 4883 (class 0 OID 16445)
 -- Dependencies: 220
 -- Data for Name: vaccine_clinic; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -305,6 +307,15 @@ ALTER TABLE ONLY public.vaccine_clinic
 
 
 --
+-- TOC entry 4732 (class 2606 OID 16480)
+-- Name: vaccination clinic_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.vaccination
+    ADD CONSTRAINT clinic_id FOREIGN KEY (clinic_id) REFERENCES public.clinic(clinic_id) NOT VALID;
+
+
+--
 -- TOC entry 4728 (class 2606 OID 16437)
 -- Name: doctor_clinic doctor_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
@@ -314,7 +325,7 @@ ALTER TABLE ONLY public.doctor_clinic
 
 
 --
--- TOC entry 4732 (class 2606 OID 16470)
+-- TOC entry 4733 (class 2606 OID 16470)
 -- Name: vaccination doctor_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -332,7 +343,7 @@ ALTER TABLE ONLY public.vaccine_clinic
 
 
 --
--- TOC entry 4733 (class 2606 OID 16475)
+-- TOC entry 4734 (class 2606 OID 16475)
 -- Name: vaccination vaccine_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -340,7 +351,7 @@ ALTER TABLE ONLY public.vaccination
     ADD CONSTRAINT vaccine_id FOREIGN KEY (vaccine_id) REFERENCES public.vaccine(vaccine_id);
 
 
--- Completed on 2024-10-10 12:40:35
+-- Completed on 2024-10-16 23:12:51
 
 --
 -- PostgreSQL database dump complete
